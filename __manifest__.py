@@ -8,10 +8,12 @@
 
         "depends": [
             "base",
-            "website_sale",
-            "payment", ],
+            "website_sale"
+            ],
 
-        "data": [],
+        "data": [
+            "views/payment_provider_form.xml",
+            ],
         "assets": {},
         "installable": True,
 }

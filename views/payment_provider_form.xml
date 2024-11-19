@@ -1,0 +1,29 @@
+<odoo>
+    <record id="view_payment_provider_form"
+            model="ir.ui.view">
+        <field name="name">payment.provider.form</field>
+        <field name="model">payment.provider</field>
+        <field name="inherit_id"
+               ref="payment.payment_provider_form" />
+        <field name="arch"
+               type="xml">
+            <xpath expr="//notebook"
+                   position="inside">
+                <page string="Discounts">
+                    <group>
+                        <field name="discount_type"
+                               string="Discount Type" />
+                    </group>
+                    <group>
+                        <field name="discount_percentage"
+                               string="Discount Percentage"
+                               modifiers="{'invisible': [('discount_type', '!=', 'percentage')]}" />
+                        <field name="discount_fixed_amount"
+                               string="Discount Fixed Amount"
+                               modifiers="{'invisible': [('discount_type', '!=', 'fixed')]}" />
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

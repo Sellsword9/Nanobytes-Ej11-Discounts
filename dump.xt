@@ -1,0 +1,8 @@
+    async _updateDeliveryMethod(radio) {
+        this._showLoadingBadge(radio);
+        const result = await this._setDeliveryMethod(radio.dataset.dmId);
+        this._updateAmountBadge(radio, result);
+        this._updateCartSummary(result);
+    }
+
+    # Gotta make basically this but for payment provider

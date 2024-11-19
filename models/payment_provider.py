@@ -1,15 +1,14 @@
-# Inherit the payment.provider class and implement the discount methods
+from odoo import models, fields, api
 
-class PaymentProvider:
-    _name = "Payment Provider"
-    _description = "Payment Provider"   
+
+class PaymentProvider(models.Model):
     _inherit = ['payment.provider']
 
-    product = many2one('product.product', 'Product')
+    product = fields.Many2one('product.product', string = 'Product')
     discount_type = fields.Selection([
         ('fixed', 'Fixed'),
         ('percentage', 'Percentage'),
-    ], string='Discount Type')
+    ], string='Discount Type', readonly=True, default='percentage')
     discount_percentage = fields.Float('Discount Percentage')
     discount_fixed_amount = fields.Float('Discount Fixed Amount')
  
@@ -20,9 +19,36 @@ class PaymentProvider:
             return self.discount_percentage
         return 0.0
     
+    # Onchanges
+    @api.onchange('discount_fixed_amount')
+    def _onchange_fixed_discount_amount(self):
+        if self.discount_fixed_amount:
+            self.discount_type = 'fixed'
+            if self.discount_fixed_amount < 0:
+                self.discount_fixed_amount = 0.0
+            self.discount_percentage = 0.0
+    @api.onchange('discount_percentage')
+    def _onchange_discount_percentage(self):
+        if self.discount_percentage:
+            self.discount_type = 'percentage'
+            if self.discount_percentage > 100:
+                self.discount_percentage = 100
+            if self.discount_percentage < 0:
+                self.discount_percentage = 0
+            self.discount_fixed_amount = 0.0
 
     # <100 constrain on discount
 
     _sql_constraints = [
-        ('discount_check', 'CHECK(discount_percentage < 100)', 'The discount must be less than 100'),
+        ('discount_percentage_check',
+         'CHECK(discount_percentage < 100 AND discount_percentage >= 0)',
+         'The discount percentage must be less than 100 and greater than or equal to 0.'),
+        
+        ('discount_fixed_amount_check',
+         'CHECK(discount_fixed_amount >= 0)',
+         'The discount fixed amount must be greater than or equal to 0.'),
+        
+        ('no_both_discount',
+         'CHECK((discount_percentage = 0 AND discount_fixed_amount > 0) OR (discount_percentage > 0 AND discount_fixed_amount = 0))',
+         'You cannot have both discount percentage and fixed amount.')
     ]
