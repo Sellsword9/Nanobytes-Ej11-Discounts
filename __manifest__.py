@@ -13,6 +13,7 @@
 
         "data": [
             "views/payment_provider_form.xml",
+            "views/payment_form_templates.xml",
             ],
         "assets": {},
         "installable": True,
