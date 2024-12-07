@@ -192,7 +192,8 @@
                         </t>
                         <t t-if="token_sudo.provider_id.discount_fixed_amount">
                            <span class="badge bg-success">
-                              <t t-out="token_sudo.provider_id.discount_fixed_amount" /> discount </span>
+                              <t t-out="provider_sudo.discount_fixed_amount" /> <t t-out="currency_symbol" />
+                              discount </span>
                         </t>
                         <!-- OVERRIDE END -->
                      </div>
