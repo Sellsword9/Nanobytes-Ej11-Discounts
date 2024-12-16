@@ -1,0 +1,5 @@
+<template id="ej11_provider_discount_widget">
+    <t t-name="ej11.ProviderDiscountWidget">
+      <h1>hola</h1>
+    </t>
+</template>

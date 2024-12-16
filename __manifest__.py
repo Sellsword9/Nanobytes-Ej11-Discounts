@@ -8,13 +8,22 @@
 
         "depends": [
             "base",
-            "website_sale"
+            "website_sale",
+            "web",
+            "portal",
             ],
-
+        
         "data": [
             "views/payment_provider_form.xml",
             "views/payment_form_templates.xml",
+            "views/total.xml"
             ],
-        "assets": {},
+        "assets": {
+            "web.assets_frontend": [
+                "ej11/static/src/js/provider_discount_widget.js",
+                "ej11/static/src/js/provider_discount_widget.xml",
+                ],
+        },
+        
         "installable": True,
 }

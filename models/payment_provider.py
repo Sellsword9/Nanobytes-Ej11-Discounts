@@ -11,7 +11,7 @@ class PaymentProvider(models.Model):
     discount_type = fields.Selection([
         ('fixed', 'Fixed'),
         ('percentage', 'Percentage'),
-    ], string='Discount Type', readonly=True, default='percentage')
+    ], string='Discount Type', readonly=False, default='percentage')
     discount_percentage = fields.Float('Discount Percentage')
     discount_fixed_amount = fields.Float('Discount Fixed Amount')
     
@@ -27,26 +27,6 @@ class PaymentProvider(models.Model):
         for record in self:
             record.discount = record.get_discount()
     
-    # Onchanges
-    @api.onchange('discount_fixed_amount')
-    def _onchange_fixed_discount_amount(self):
-        if self.discount_fixed_amount:
-            self.discount_type = 'fixed'
-            if self.discount_fixed_amount < 0:
-                self.discount_fixed_amount = 0.0
-            self.discount_percentage = 0.0
-    @api.onchange('discount_percentage')
-    def _onchange_discount_percentage(self):
-        if self.discount_percentage:
-            self.discount_type = 'percentage'
-            if self.discount_percentage > 100:
-                self.discount_percentage = 100
-            if self.discount_percentage < 0:
-                self.discount_percentage = 0
-            self.discount_fixed_amount = 0.0
-
-    # <100 constrain on discount
-
     _sql_constraints = [
         ('discount_percentage_check',
          'CHECK(discount_percentage < 100 AND discount_percentage >= 0)',
@@ -58,5 +38,5 @@ class PaymentProvider(models.Model):
         
         ('no_both_discount',
          'CHECK((discount_percentage = 0 AND discount_fixed_amount > 0) OR (discount_percentage > 0 AND discount_fixed_amount = 0))',
-         'You cannot have both discount percentage and fixed amount.')
+         'You cannot have both a discount percentage and fixed amount.')
     ]

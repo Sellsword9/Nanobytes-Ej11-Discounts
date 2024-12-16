@@ -1,0 +1,18 @@
+<odoo>
+    <!-- This adds the Discount from the Payment Provider to the total view -->
+    <template id="website_sale_total_inherit" inherit_id="website_sale.total">
+        <xpath expr="//tr[@id='order_total']" position="before">
+            <tr>
+                <td>
+                Payment provider discount
+                </td>
+                <td class="text-end pe-0 pt-0 pb-2 border-0">
+                   <!--  <span t-out="website_sale_order.provider_discount"/> -->
+                   <!-- Instead of simply showing the discount we use the js component to show it -->
+                    <span t-out="website_sale_order.amount_total" id="provider_discount_access" style="display:none"/>
+                    <span id="discount_with_currency"><span id="provider_discount_span">0.00</span><t t-esc="website_sale_order.currency_id.symbol"/></span>
+                </td>
+            </tr>
+        </xpath>
+    </template>
+</odoo>
